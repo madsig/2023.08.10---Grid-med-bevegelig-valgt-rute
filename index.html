@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #board {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            grid-template-rows: repeat(8, 50px);
+        }
+
+        #board>div {
+            border: 1px solid lightblue;
+        }
+
+        .selected {
+            background-color: yellow;
+        }
+        .buttons {
+            width: 20rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            size: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="board"></div>
+    <div id="butt" class="buttons">
+        <button onclick="move('up')">↑</button>
+        <div>
+            <button onclick="move('left')">←</button>
+            <button onclick="move('right')">→</button>
+        </div>
+        <button onclick="move('down')">↓</button>
+    <script>
+        let selectedSquareIndex = 7;
+        const size = 64;
+        
+        const boardElement = document.getElementById('board');
+        
+        showBoard();
+        
+        function generatePattern(length) {
+            const pattern = '<div></div>';
+            return ''.padEnd(pattern.length * length, pattern);
+        }
+
+        function showBoard() {
+            const lengthPart1 = selectedSquareIndex;
+            const lengthPart3 = size - (selectedSquareIndex + 1);
+
+            const part1 = generatePattern(lengthPart1);
+            const part2 = '<div class="selected"></div>';
+            const part3 = generatePattern(lengthPart3);
+
+            const fullHtml = part1 + part2 + part3;
+           boardElement.innerHTML = fullHtml;
+        }
+
+        const NoRight = [7, 15, 23, 31, 39, 47, 55];
+        const NoLeft = [8, 16, 24, 32, 40, 48, 56];
+
+        function move(direction) {
+            let backup = selectedSquareIndex;
+
+            if (direction === "up") {
+                selectedSquareIndex -=  8;
+            } else if (direction === "down") {
+                selectedSquareIndex +=  8;
+            } else if (direction === "left" && NoLeft.indexOf(selectedSquareIndex) === -1) {
+                selectedSquareIndex--;
+            } else if (direction === "right" && NoRight.indexOf(selectedSquareIndex) === -1) {
+                selectedSquareIndex++;
+            }
+
+            if (selectedSquareIndex < 0 || selectedSquareIndex > 63) {
+                selectedSquareIndex = backup;
+            }
+
+            showBoard();
+        }
+        
+        </script>
+
+</body>
+
+</html>
